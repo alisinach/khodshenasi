@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تست خودشناسی – دانش خانواده</title>
+<style>
+:root{--bg:#eef3f1;--card:#fff;--ink:#1f2937;--mut:#6b7280;--line:#e2e8e5;--pri:#2f6f5e;--pri2:#e3f1ec;--warn:#b45309;--warnbg:#fef3c7;--low:#c2410c;--mid:#ca8a04;--high:#15803d}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,#e4efea,#f6f8f7 60%);color:var(--ink);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.9;font-size:16px}
+[hidden]{display:none!important}
+button{font:inherit;cursor:pointer}
+#top{width:100%;max-width:640px;margin:0 auto;padding:16px 16px 0}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.85rem;color:var(--mut);margin-bottom:8px}
+.chip{background:var(--pri2);color:var(--pri);border-radius:999px;padding:1px 12px;font-weight:700;font-size:.8rem}
+.track{height:8px;background:#d5e2dd;border-radius:8px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--pri);border-radius:8px;transition:width .3s}
+.stage{flex:1;display:flex;align-items:center;justify-content:center;padding:16px}
+.panel{width:100%;max-width:640px;background:var(--card);border-radius:22px;box-shadow:0 12px 40px rgba(31,41,55,.09);padding:26px 22px}
+.fwd{animation:fwd .28s ease both}.back{animation:back .28s ease both}
+@keyframes fwd{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+@keyframes back{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.fwd,.back{animation:none}.fill{transition:none}}
+.qtext{font-size:1.3rem;line-height:2;font-weight:700;margin:2px 0 18px;min-height:4.6em}
+.choice{display:flex;align-items:center;gap:12px;width:100%;text-align:right;border:2px solid var(--line);background:#fff;color:var(--ink);border-radius:14px;padding:12px 14px;margin:8px 0;font-weight:600;transition:border-color .15s,background .15s}
+.choice .num{flex:none;width:34px;height:34px;border-radius:50%;background:var(--pri2);color:var(--pri);display:grid;place-items:center;font-weight:800}
+.choice.sel{border-color:var(--pri);background:var(--pri2)}
+.choice.sel .num{background:var(--pri);color:#fff}
+@media(hover:hover){.choice:hover{border-color:var(--pri)}}
+.choice:focus-visible,.btn:focus-visible,.ghost:focus-visible{outline:3px solid #93c5b5;outline-offset:2px}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:.85rem;color:var(--mut)}
+.btn{border:0;border-radius:14px;padding:13px 26px;background:var(--pri);color:#fff;font-weight:700}
+.btn.wide{width:100%;margin-top:10px}
+.btn.sec{background:#fff;color:var(--pri);border:2px solid var(--pri)}
+.ghost{border:0;background:none;color:var(--pri);font-weight:700;padding:6px 4px}
+.ghost:disabled{color:#b8c4c0;cursor:default}
+.panel h1{margin:0 0 6px;font-size:1.5rem;color:var(--pri)}
+.panel h2.big2{margin:8px 0;font-size:1.35rem}
+.hero{font-size:3rem;line-height:1.2}
+.list{margin:12px 0;padding-inline-start:20px;color:var(--ink)}
+.mut{color:var(--mut);font-size:.9rem}
+/* نتایج */
+main{width:100%;max-width:860px;margin:0 auto;padding:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0}
+h2{margin:0 0 8px;font-size:1.2rem;color:var(--pri)}
+h3{margin:18px 0 6px;font-size:1.05rem}
+.sub{font-size:.9rem;color:var(--mut);margin:0 0 6px}
+.row{display:grid;grid-template-columns:150px 1fr 100px;gap:10px;align-items:center;margin:8px 0}
+.meter{height:12px;background:var(--line);border-radius:8px;overflow:hidden}
+.meter i{display:block;height:100%;border-radius:8px}
+.lv{font-size:.85rem;font-weight:700;text-align:left}
+.l0{color:var(--low)}.l1{color:var(--mid)}.l2{color:var(--high)}
+.b0{background:var(--low)}.b1{background:var(--mid)}.b2{background:var(--high)}
+.pill{display:inline-block;background:var(--pri2);color:var(--pri);border-radius:999px;padding:2px 12px;margin:2px;font-weight:600;font-size:.9rem}
+.big{font-size:2.2rem;font-weight:800;color:var(--pri)}
+.warn{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:10px 14px;margin:10px 0}
+.pat{border-right:4px solid var(--pri);background:var(--pri2);border-radius:8px;padding:8px 12px;margin:8px 0}
+.pat b{display:block}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+ul{margin:6px 0;padding-inline-start:22px}
+@media(max-width:560px){.row{grid-template-columns:1fr 100px}.row .meter{grid-column:1/-1;order:3}.qtext{font-size:1.15rem}}
+@media print{#top,.actions{display:none!important}body{background:#fff}.card{border:0;padding:6px 0;break-inside:avoid}}
+</style>
+</head>
+<body>
+<div id="top" hidden>
+  <div class="meta"><span id="pc"></span><span class="chip" id="sec"></span></div>
+  <div class="track"><div class="fill" id="fill"></div></div>
+</div>
+<div class="stage" id="stage"></div>
+<main id="result" hidden></main>
+<script>
+const fa=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+
+/* [متن, گروه, معکوس؟] */
+const ITEMS=[
+["نقاط قوت خود را می‌توانم با مثال مشخص بیان کنم.","kh",0],
+["هنگام عصبانیت، پیش از واکنش مکث می‌کنم.","hy",0],
+["در کل از خودم راضی‌ام.","ez",0],
+["مهم‌ترین ارزش‌های زندگی‌ام را می‌توانم نام ببرم.","ar",0],
+["نیازها و مرزهایم را محترمانه و روشن بیان می‌کنم.","ap",0],
+["مسئولیت اشتباهاتم را می‌پذیرم.","ms",0],
+["معمولاً می‌دانم چرا در یک موقعیت خاص چنین احساسی دارم.","kh",0],
+["در شرایط پرفشار آرامشم را حفظ می‌کنم.","hy",0],
+["اشتباهاتم را بدون تحقیر شدید خودم می‌پذیرم.","ez",0],
+["تصمیم‌های مهم من با ارزش‌هایم هماهنگ است.","ar",0],
+["هنگام اختلاف، به‌دنبال راه‌حل هستم نه مقصر.","ap",0],
+["به قول و قرارهایم پایبندم.","ms",0],
+["اغلب نمی‌دانم واقعاً از زندگی چه می‌خواهم.","kh",1],
+["وقتی ناراحت می‌شوم، مدت زیادی درگیر آن می‌مانم.","hy",1],
+["ارزش خود را وابسته به تأیید دیگران می‌دانم.","ez",1],
+["برای پنج سال آینده هدف مشخصی دارم.","ar",0],
+["هنگام صحبت دیگران، بدون قطع‌کردن گوش می‌دهم.","ap",0],
+["درباره نقش‌ها و وظایف در زندگی مشترک (مالی، فرزندپروری، خانه‌داری) فکر کرده‌ام.","ms",0],
+["نقاط ضعف خود را می‌شناسم و انکارشان نمی‌کنم.","kh",0],
+["معمولاً در اوج هیجان تصمیم مهمی نمی‌گیرم.","hy",0],
+["به توانایی خود برای حل مشکلات اعتماد دارم.","ez",0],
+["گاهی برخلاف باورهایم رفتار می‌کنم تا مورد قبول دیگران باشم.","ar",1],
+["در اختلاف‌ها یا ساکت می‌شوم یا بحث را تند می‌کنم.","ap",1],
+["تحمل ناسازگاری‌های کوچک در یک رابطه بلندمدت را دارم.","ms",0],
+["بازخورد دیگران درباره‌ام با تصویری که از خودم دارم هم‌خوان است.","kh",0],
+["اغلب بعد از عصبانیت از رفتارم پشیمان می‌شوم.","hy",1],
+["اغلب خودم را با دیگران مقایسه می‌کنم و احساس کم‌ارزشی می‌کنم.","ez",1],
+["بین خواسته‌های لحظه‌ای و نیازهای واقعی‌ام تفاوت قائل می‌شوم.","ar",0],
+["می‌توانم موضوع را از دیدگاه طرف مقابل ببینم.","ap",0],
+["برای دیگران وقت و انرژی می‌گذارم، حتی وقتی به نفع من نیست.","ms",0],
+["تا امروز هرگز از کاری پشیمان نشده‌ام.","vl",0],
+["همیشه با همه مهربان و صبورم.","vl",0],
+/* شخصیت 33-47 */
+["در جمع‌ها انرژی می‌گیرم و راحت صحبت را شروع می‌کنم.","ex",0],
+["به احساسات و مشکلات دیگران توجه می‌کنم.","ag",0],
+["کارهایم را برنامه‌ریزی می‌کنم و به‌موقع انجام می‌دهم.","co",0],
+["معمولاً آرام و ثابت‌قدمم.","st",0],
+["به تجربه‌های تازه و ایده‌های متفاوت علاقه دارم.","op",0],
+["ترجیح می‌دهم بیشتر وقتم را تنها باشم و کمتر صحبت کنم.","ex",1],
+["اغلب به دیگران ایراد می‌گیرم و دیر می‌بخشم.","ag",1],
+["کارها را به تعویق می‌اندازم و نظم کمی دارم.","co",1],
+["زود نگران یا مضطرب می‌شوم.","st",1],
+["ترجیح می‌دهم همان روش‌های همیشگی را ادامه دهم.","op",1],
+["به‌راحتی با افراد جدید دوست می‌شوم.","ex",0],
+["در اختلاف‌ها حاضرم کوتاه بیایم.","ag",0],
+["برای رسیدن به هدفم پشتکار دارم.","co",0],
+["بعد از شکست یا ناراحتی، سریع خودم را بازمی‌یابم.","st",0],
+["به مسائل از زاویه‌های مختلف فکر می‌کنم.","op",0],
+/* دلبستگی 48-56 */
+["در روابط نزدیک راحت به دیگران تکیه می‌کنم و دیگران هم می‌توانند به من تکیه کنند.","se",0],
+["می‌ترسم کسانی که دوستشان دارم مرا ترک کنند.","an",0],
+["وقتی کسی بیش از حد به من نزدیک می‌شود، معذب می‌شوم.","av",0],
+["بیان احساساتم در رابطه برایم سخت نیست.","se",0],
+["به اطمینان‌دادن‌های مکرر نیاز دارم که دوستم دارند.","an",0],
+["ترجیح می‌دهم مشکلاتم را خودم حل کنم و از کسی کمک نخواهم.","av",0],
+["بعد از اختلاف با یک فرد نزدیک، به‌سادگی آشتی می‌کنم.","se",0],
+["اگر پیام یا تماسم بی‌پاسخ بماند، زود نگران می‌شوم.","an",0],
+["وابسته‌شدن به دیگران را نوعی ضعف می‌دانم.","av",0],
+/* تعارض 57-66 */
+["در اختلاف می‌کوشم نظر خودم پذیرفته شود.","cp",0],
+["می‌نشینم تا هر دو طرف نیازهای واقعی‌مان را روی میز بگذاریم.","cl",0],
+["معمولاً وسط راه به توافق می‌رسیم؛ هر دو کمی کوتاه می‌آییم.","cm",0],
+["ترجیح می‌دهم از موضوع‌های جنجالی فاصله بگیرم.","cv",0],
+["برای حفظ آرامش رابطه، خواسته‌ام را کنار می‌گذارم.","ca",0],
+["اگر مطمئن باشم حق با من است، کوتاه نمی‌آیم.","cp",0],
+["تا مسئله به‌طور کامل حل نشود، رهایش نمی‌کنم.","cl",0],
+["اگر لازم باشد، بخشی از خواسته‌ام را برای رسیدن به توافق فدا می‌کنم.","cm",0],
+["در بحث‌های پرتنش ترجیح می‌دهم سکوت کنم یا بحث را عوض کنم.","cv",0],
+["اغلب خواسته‌ی طرف مقابل را بر خواسته‌ی خودم ترجیح می‌دهم.","ca",0]
+];
+
+const SECTIONS=[
+ {t:"بخش ۱: خودشناسی",d:"میزان موافقت خود را با هر گزاره مشخص کنید.",a:0,b:32},
+ {t:"بخش ۲: ویژگی‌های شخصیتی",d:"همان مقیاس ۱ تا ۵ را به کار ببرید.",a:32,b:47},
+ {t:"بخش ۳: سبک دلبستگی در روابط نزدیک",d:"به روابط نزدیک خود (خانواده، دوست صمیمی، شریک زندگی) فکر کنید.",a:47,b:56},
+ {t:"بخش ۴: سبک مواجهه با تعارض",d:"به اختلاف‌های واقعی‌ای که با خانواده یا دوستان داشته‌اید فکر کنید.",a:56,b:66}
+];
+
+const DIMS={
+ kh:{n:"خودآگاهی",lo:"شناخت روشنی از ویژگی‌ها، نیازها و خواسته‌های خود ندارید.",mi:"گاهی خود را خوب می‌شناسید، اما در موقعیت‌های پیچیده تصویرتان مبهم می‌شود.",hi:"تصویر روشن و واقع‌بینانه‌ای از خود دارید.",tip:"هر شب سه احساس روز و دلیل‌شان را بنویسید و از یک دوست بخواهید دو نقطه قوت و یک نقطه ضعف شما را بگوید."},
+ hy:{n:"تنظیم هیجان",lo:"در اوج خشم یا ناراحتی کنترل کمتری دارید و بعداً پشیمان می‌شوید.",mi:"در بیشتر شرایط آرام می‌مانید، اما فشار زیاد تعادل شما را به هم می‌زند.",hi:"هیجان‌هایتان را به‌خوبی مدیریت می‌کنید و عجولانه تصمیم نمی‌گیرید.",tip:"در بحث‌ها پیش از پاسخ ۶۰ ثانیه مکث و تنفس آهسته داشته باشید و تصمیم مهم را به بعد از آرام‌شدن موکول کنید."},
+ ez:{n:"عزت‌نفس و پذیرش خود",lo:"ارزش‌گذاری شما به تأیید یا مقایسه با دیگران وابسته است و با اشتباه‌ها سخت‌گیرانه برخورد می‌کنید.",mi:"عزت‌نفس شما در بیشتر مواقع پایدار است اما با انتقاد یا مقایسه نوسان می‌کند.",hi:"خود را با نقاط قوت و ضعف می‌پذیرید و به توانایی‌هایتان اعتماد دارید.",tip:"هر روز یک موفقیت کوچک و یک اشتباه را بدون سرزنش یادداشت کنید و مقایسه‌های اجتماعی را کم کنید."},
+ ar:{n:"ارزش‌ها و هدف‌گذاری",lo:"ارزش‌ها و هدف‌هایتان مبهم است و گاهی برای پذیرفته‌شدن از باورهایتان فاصله می‌گیرید.",mi:"ارزش‌های اصلی را می‌شناسید، اما همیشه تصمیم‌ها با آن‌ها هماهنگ نیست.",hi:"ارزش‌ها و هدف‌هایتان روشن است و تصمیم‌هایتان با آن‌ها هم‌سو است.",tip:"پنج ارزش مهم را بنویسید، برای هر یک یک رفتار قابل‌اندازه‌گیری هفتگی تعیین کنید و یک هدف شش‌ماهه مشخص بنویسید."},
+ ap:{n:"ارتباط و حل تعارض",lo:"در اختلاف‌ها معمولاً سکوت می‌کنید یا تند می‌شوید و بیان روشن نیازها برایتان دشوار است.",mi:"ارتباط شما در شرایط عادی خوب است، اما در اختلاف‌های جدی کم می‌آورید.",hi:"نیازهایتان را روشن بیان می‌کنید، خوب گوش می‌دهید و به‌دنبال راه‌حل هستید.",tip:"از جمله‌های «من» استفاده کنید («من وقتی ... احساس ... می‌کنم، نیاز دارم ...») و پیش از پاسخ، حرف طرف مقابل را بازگو کنید."},
+ ms:{n:"مسئولیت و تعهد",lo:"آمادگی شما برای پذیرش مسئولیت و تعهد بلندمدت هنوز کم است.",mi:"در بسیاری از موارد مسئولیت‌پذیرید، اما آمادگی برای تعهدهای بلندمدت نیاز به تمرین دارد.",hi:"مسئولیت‌پذیر و پایبند هستید و برای نقش‌های زندگی مشترک آماده‌اید.",tip:"هر هفته یک تعهد کوچک تعریف کنید و کامل انجام دهید و درباره نقش‌های مالی و خانه‌داری با خانواده گفت‌وگو کنید."}
+};
+const DK=["kh","hy","ez","ar","ap","ms"];
+
+const PERS={
+ ex:{n:"برون‌گرایی",hi:"اجتماعی، پرانرژی و آغازگر ارتباط",lo:"آرام، درون‌گرا و نیازمند خلوت"},
+ ag:{n:"موافق‌بودن",hi:"همدل، همکار و اهل بخشش",lo:"رقابتی، صریح و انتقادگر"},
+ co:{n:"وظیفه‌شناسی",hi:"منظم، پایبند و هدفمند",lo:"انعطاف‌پذیر، اما مستعد تعویق و بی‌نظمی"},
+ st:{n:"ثبات هیجانی",hi:"آرام و مقاوم در برابر فشار",lo:"حساس و مستعد نگرانی و نوسان خلق"},
+ op:{n:"گشودگی",hi:"کنجکاو، خلاق و پذیرای تغییر",lo:"عمل‌گرا و علاقه‌مند به روال آشنا"}
+};
+const ATT={
+ se:{n:"ایمن",t:"تکیه‌پذیری و آسایش در نزدیکی؛ احساسات را راحت بیان می‌کنید و بعد از اختلاف آشتی می‌کنید."},
+ an:{n:"اضطرابی",t:"نیاز زیاد به اطمینان و ترس از رها شدن؛ بی‌پاسخ ماندن پیام یا تماس شما را نگران می‌کند."},
+ av:{n:"اجتنابی",t:"تمایل به فاصله‌گذاری و استقلال افراطی؛ کمک‌خواستن و وابستگی برایتان دشوار است."}
+};
+const CON={
+ cp:{n:"رقابتی",t:"تمایل به برد و باخت؛ می‌خواهید نظر خودتان پذیرفته شود."},
+ cl:{n:"همکارانه",t:"به‌دنبال راه‌حلی هستید که نیاز هر دو طرف را برآورده کند."},
+ cm:{n:"مصالحه",t:"با گذشتن متقابل از بخشی از خواسته‌ها به توافق می‌رسید."},
+ cv:{n:"اجتنابی",t:"از موضوع‌های جنجالی فاصله می‌گیرید؛ در بلندمدت ممکن است مسائل حل‌نشده انباشته شوند."},
+ ca:{n:"سازگارانه",t:"خواسته‌ی طرف مقابل را مقدم می‌کنید؛ در بلندمدت خطر انباشت نارضایتی دارد."}
+};
+
+const PATTERNS=[
+ [s=>s.kh>=19&&s.hy<=11,"خودآگاهی بالا، تنظیم هیجان پایین","خود را می‌شناسید ولی در اوج هیجان واکنشی رفتار می‌کنید.","تمرین مکث ۶۰ ثانیه‌ای پیش از پاسخ در بحث‌ها."],
+ [s=>s.ez<=11&&s.ap<=11,"عزت‌نفس پایین، ارتباط پایین","احتمال وابستگی به تأیید دیگران و سکوت یا پذیرش بیش از حد.","تمرین جمله‌های «من» و بیان یک خواسته کوچک در هفته."],
+ [s=>s.ar>=19&&s.ms<=11,"ارزش‌ها بالا، مسئولیت پایین","آرمان‌های روشن دارید، اما تبدیل آن‌ها به رفتار روزمره کم است.","برای هر ارزش یک رفتار قابل‌اندازه‌گیری تعیین کنید."],
+ [s=>s.ap>=19&&s.kh<=11,"ارتباط بالا، خودآگاهی پایین","رابطه‌ساز هستید ولی نیازهای خود را کمتر می‌شناسید.","نوشتن روزانه سه احساس و دلیل آن‌ها."],
+ [s=>s.hy>=19&&s.ez<=11,"آرامش ظاهری، عزت‌نفس پایین","هیجان را مهار می‌کنید ولی درون خود را سخت‌گیرانه قضاوت می‌کنید.","ثبت روزانه یک موفقیت و جایگزینی گفتار درونی سرزنشگر."],
+ [(s,t)=>t<70,"نمرات کلی پایین","در آغاز مسیر خودشناسی هستید یا فشار موقتی روی پاسخ‌ها اثر گذاشته است؛ نتیجه را قطعی نگیرید.","اگر فشار ادامه دارد با مشاور دانشگاه گفت‌وگو کنید."],
+ [(s,t,v)=>t>=120&&v>=9,"نمرات بالا با اعتبار مشکوک","احتمال پاسخ‌دهی آرمانی وجود دارد.","پرسشنامه را دوباره و با تمرکز بر رفتار واقعی پاسخ دهید."]
+];
+
+
+/* ---------- منطق آزمون مرحله‌ای ---------- */
+const KEY="khodshenasi_v2";
+const WORDS=["","کاملاً مخالفم","مخالفم","نظری ندارم","موافقم","کاملاً موافقم"];
+const N=ITEMS.length;
+let ans=Array(N).fill(0),idx=0,locked=false;
+const shown=new Set();
+try{const d=JSON.parse(localStorage.getItem(KEY)||"null");if(d&&Array.isArray(d.ans)&&d.ans.length===N){ans=d.ans;idx=Math.min(d.idx||0,N-1)}}catch(e){}
+const $=id=>document.getElementById(id);
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({ans:ans,idx:idx}))}catch(e){}};
+const answered=()=>ans.filter(Boolean).length;
+const secIdx=i=>SECTIONS.findIndex(S=>i>=S.a&&i<S.b);
+function view(n){
+  $("stage").hidden=(n==="result");
+  $("result").hidden=(n!=="result");
+  $("top").hidden=(n!=="quiz");
+  window.scrollTo(0,0);
+}
+function setStage(h){$("stage").innerHTML=h}
+
+function intro(){
+  view("intro");
+  const n=answered();
+  let h=`<div class="panel fwd"><div class="hero">🌱</div><h1>تست خودشناسی</h1>
+  <p class="mut" style="margin:0 0 8px">درس دانش خانواده</p>
+  <ul class="list"><li>${fa(N)} سؤال، هر صفحه فقط یک سؤال</li><li>با انتخاب گزینه، خودکار به سؤال بعد می‌روید</li><li>حدود ۱۵ دقیقه؛ پاسخ درست یا غلط وجود ندارد</li><li>به «آنچه معمولاً هستم» در شش ماه اخیر فکر کنید، نه «آنچه باید باشم»</li></ul>
+  <p class="mut">پاسخ‌ها فقط در مرورگر شما می‌مانند و به جایی ارسال نمی‌شوند. نتیجه ابزاری آموزشی است، نه تشخیص بالینی.</p>`;
+  if(n>0&&n<N){
+    h+=`<button class="btn wide" data-act="resume">ادامه از سؤال ${fa(ans.findIndex(x=>!x)+1)}</button><button class="btn sec wide" data-act="start">شروع از اول</button>`;
+  }else if(n===N){
+    h+=`<button class="btn wide" data-act="result">مشاهده نتیجه قبلی</button><button class="btn sec wide" data-act="start">شروع دوباره</button>`;
+  }else{
+    h+=`<button class="btn wide" data-act="start">شروع تست</button>`;
+  }
+  setStage(h+`</div>`);
+}
+
+function go(dir){
+  const si=secIdx(idx);
+  if(dir>=0&&idx===SECTIONS[si].a&&!shown.has(si)){shown.add(si);return interlude(si)}
+  question(dir);
+}
+function interlude(si){
+  view("quiz");
+  const S=SECTIONS[si];
+  $("pc").textContent="بخش "+fa(si+1)+" از "+fa(SECTIONS.length);
+  $("sec").textContent=S.t.split(": ")[1]||S.t;
+  $("fill").style.width=(idx/N*100)+"%";
+  setStage(`<div class="panel fwd" style="text-align:center"><div class="chip">بخش ${fa(si+1)} از ${fa(SECTIONS.length)}</div>
+  <h2 class="big2">${S.t.split(": ")[1]||S.t}</h2><p class="mut" style="margin:0 0 6px">${S.d}</p>
+  <p class="mut">${fa(S.b-S.a)} سؤال</p><button class="btn wide" data-act="go">شروع این بخش</button>
+  ${idx>0?'<button class="ghost" data-act="prev" style="margin-top:8px">← بازگشت به سؤال قبل</button>':''}</div>`);
+}
+function question(dir){
+  view("quiz");
+  const S=SECTIONS[secIdx(idx)];
+  $("pc").textContent="سؤال "+fa(idx+1)+" از "+fa(N);
+  $("sec").textContent=S.t.split(": ")[1]||S.t;
+  $("fill").style.width=(idx/N*100)+"%";
+  let h=`<div class="panel ${dir<0?"back":"fwd"}" role="group" aria-label="سؤال ${fa(idx+1)}"><div class="qtext">${ITEMS[idx][0]}</div><div class="choices" role="radiogroup">`;
+  for(let v=5;v>=1;v--){
+    h+=`<button type="button" role="radio" aria-checked="${ans[idx]===v}" class="choice${ans[idx]===v?" sel":""}" data-v="${v}"><span class="num">${fa(v)}</span>${WORDS[v]}</button>`;
+  }
+  h+=`</div><div class="nav"><button class="ghost" data-act="prev" ${idx===0?"disabled":""}>← قبلی</button><span>${fa(answered())} از ${fa(N)} پاسخ داده شد</span></div></div>`;
+  setStage(h);
+}
+function pick(v,btn){
+  if(locked)return;
+  locked=true;
+  ans[idx]=v;save();
+  document.querySelectorAll(".choice").forEach(b=>{b.classList.remove("sel");b.setAttribute("aria-checked","false")});
+  btn.classList.add("sel");btn.setAttribute("aria-checked","true");
+  setTimeout(()=>{
+    locked=false;
+    if(idx<N-1){idx++;save();go(1)}
+    else{
+      const miss=ans.findIndex(x=>!x);
+      if(miss>=0){idx=miss;save();question(-1)}else{save();results()}
+    }
+  },260);
+}
+function prev(){
+  if(locked||idx===0)return;
+  idx--;save();question(-1);
+}
+$("stage").addEventListener("click",e=>{
+  const c=e.target.closest(".choice");
+  if(c){pick(+c.dataset.v,c);return}
+  const b=e.target.closest("[data-act]");
+  if(!b||b.disabled)return;
+  const a=b.dataset.act;
+  if(a==="start"){ans=Array(N).fill(0);idx=0;shown.clear();save();go(0)}
+  else if(a==="resume"){idx=Math.max(0,ans.findIndex(x=>!x));save();shown.add(secIdx(idx));question(1)}
+  else if(a==="result"){results()}
+  else if(a==="go"){question(1)}
+  else if(a==="prev"){prev()}
+});
+document.addEventListener("keydown",e=>{
+  if($("top").hidden||!document.querySelector(".choice"))return;
+  if(e.key>="1"&&e.key<="5"){
+    const b=document.querySelector(`.choice[data-v="${e.key}"]`);if(b)pick(+e.key,b);
+  }
+});
+
+/* ---------- محاسبه و نتایج ---------- */
+function calc(){
+  const s={};
+  ITEMS.forEach((it,i)=>{let v=ans[i];if(it[2])v=6-v;s[it[1]]=(s[it[1]]||0)+v});
+  return s;
+}
+const lv=x=>x<=11?0:x<=18?1:2;
+const LV=["نیازمند تقویت","در حال رشد","قوی"];
+const pl=x=>x<=7?0:x<=11?1:2;
+const PLV=["پایین","متوسط","بالا"];
+function ranked(keys,s){return keys.map(k=>[k,s[k]]).sort((a,b)=>b[1]-a[1])}
+
+function results(){
+  const s=calc();
+  const total=DK.reduce((a,k)=>a+s[k],0);
+  const v=s.vl;
+  const status=total<70?"آغاز خودشناسی":total<110?"خودشناسی در حال رشد":"خودشناسی پخته";
+  const rk=ranked(DK,s);
+  const top=rk.slice(0,2),bot=rk.slice(-2).reverse();
+  let h=`<section class="card"><h2>نتیجه تست خودشناسی</h2>
+   <div><span class="big">${fa(total)}</span> <span class="mut">از ۱۵۰</span> &nbsp; <span class="pill">${status}</span></div>`;
+  if(v>=9)h+=`<div class="warn">مجموع گزاره‌های اعتبار ${fa(v)} از ۱۰ است؛ احتمال دارد تصویر آرمانی از خود ارائه داده باشید. نتایج را با احتیاط بخوانید.</div>`;
+  h+=`<h3>نقاط قوت اصلی</h3>${top.map(x=>`<span class="pill">${DIMS[x[0]].n} (${fa(x[1])})</span>`).join("")}
+   <h3>اولویت‌های رشد</h3>${bot.map(x=>`<span class="pill" style="background:#fdebe3;color:#c2410c">${DIMS[x[0]].n} (${fa(x[1])})</span>`).join("")}</section>`;
+
+  h+=`<section class="card"><h2>ابعاد خودشناسی</h2><p class="sub">نمره هر بُعد بین ۵ و ۲۵ است.</p>`;
+  DK.forEach(k=>{
+    const x=s[k],l=lv(x),d=DIMS[k];
+    h+=`<div class="row"><b>${d.n}</b><div class="meter"><i class="b${l}" style="width:${(x-5)/20*100}%"></i></div><span class="lv l${l}">${fa(x)} · ${LV[l]}</span></div>
+    <p class="sub" style="margin:0 0 8px">${[d.lo,d.mi,d.hi][l]}</p>`;
+  });
+  h+=`</section>`;
+
+  const pats=PATTERNS.filter(p=>p[0](s,total,v));
+  if(pats.length){
+    h+=`<section class="card"><h2>الگوهای ترکیبی و شرایط شما</h2>`;
+    pats.forEach(p=>{h+=`<div class="pat"><b>${p[1]}</b>${p[2]}<br><span class="mut">اقدام پیشنهادی: ${p[3]}</span></div>`});
+    h+=`</section>`;
+  }
+
+  h+=`<section class="card"><h2>ویژگی‌های شخصیتی</h2><p class="sub">نمره هر ویژگی بین ۳ و ۱۵ است.</p>`;
+  const hiT=[],loT=[];
+  Object.keys(PERS).forEach(k=>{
+    const x=s[k],l=pl(x);
+    if(l===2)hiT.push(PERS[k]);
+    if(l===0)loT.push(PERS[k]);
+    h+=`<div class="row"><b>${PERS[k].n}</b><div class="meter"><i style="width:${(x-3)/12*100}%;background:var(--pri)"></i></div><span class="lv">${fa(x)} · ${PLV[l]}</span></div>`;
+  });
+  h+=`<p>`;
+  if(hiT.length)h+=`<b>ویژگی‌های برجسته:</b> ${hiT.map(t=>t.n+" ("+t.hi+")").join("؛ ")}.<br>`;
+  if(loT.length)h+=`<b>ویژگی‌های کم‌رنگ:</b> ${loT.map(t=>t.n+" ("+t.lo+")").join("؛ ")}.`;
+  if(!hiT.length&&!loT.length)h+="نمرات شما در همه ویژگی‌ها متوسط است؛ شخصیتی متعادل و وابسته به شرایط دارید.";
+  h+=`</p></section>`;
+
+  const ar=ranked(["se","an","av"],s);
+  const mixed=ar[0][1]-ar[1][1]<2;
+  h+=`<section class="card"><h2>سبک دلبستگی</h2>
+   <p class="sub">ایمن ${fa(s.se)} · اضطرابی ${fa(s.an)} · اجتنابی ${fa(s.av)} (هرکدام از ۱۵)</p>`;
+  if(mixed)h+=`<p><span class="pill">ترکیبی: ${ATT[ar[0][0]].n} و ${ATT[ar[1][0]].n}</span><br>${ATT[ar[0][0]].t}<br>${ATT[ar[1][0]].t}</p>`;
+  else h+=`<p><span class="pill">${ATT[ar[0][0]].n}</span><br>${ATT[ar[0][0]].t}</p>`;
+  h+=`<p class="mut">سبک‌های اضطرابی و اجتنابی «نقص» نیستند؛ الگوهایی آموخته‌شده‌اند که با آگاهی و تمرین تغییر می‌کنند.</p></section>`;
+
+  const cr=ranked(["cp","cl","cm","cv","ca"],s);
+  const cmix=cr[0][1]-cr[1][1]<1;
+  const healthy=["cl","cm"].includes(cr[0][0]);
+  h+=`<section class="card"><h2>سبک مواجهه با تعارض</h2>
+   <p class="sub">${cr.map(x=>CON[x[0]].n+" "+fa(x[1])).join(" · ")} (هرکدام از ۱۰)</p>
+   <p><span class="pill">${CON[cr[0][0]].n}${cmix?" + "+CON[cr[1][0]].n:""}</span><br>${CON[cr[0][0]].t}${cmix?"<br>"+CON[cr[1][0]].t:""}</p>
+   <p class="mut">${healthy?"ترکیب همکارانه و مصالحه برای زندگی مشترک سالم‌ترین الگوست و سبک شما به آن نزدیک است.":"برای زندگی مشترک، تقویت سبک‌های همکارانه و مصالحه توصیه می‌شود."}</p></section>`;
+
+  h+=`<section class="card"><h2>برنامه رشد ۳۰ روزه شما</h2><ul>`;
+  bot.forEach(x=>{h+=`<li><b>${DIMS[x[0]].n}:</b> ${DIMS[x[0]].tip}</li>`});
+  h+=`</ul><p class="mut">این هفته فقط یک رفتار را تمرین کنید و پیشرفت را با بازخورد یک فرد نزدیک بسنجید. پس از ۳۰ روز تست را دوباره انجام دهید و نمره‌ها را مقایسه کنید.</p></section>
+  <div class="actions"><button class="btn" id="print">چاپ یا ذخیره PDF</button><button class="btn sec" id="again">شروع دوباره</button></div>
+  <p class="mut">این نتایج ابزاری آموزشی برای خودآگاهی است و جایگزین ارزیابی تخصصی نیست.</p>`;
+  $("result").innerHTML=h;
+  view("result");
+  $("print").onclick=()=>window.print();
+  $("again").onclick=()=>{ans=Array(N).fill(0);idx=0;shown.clear();save();intro()};
+}
+
+intro();
+</script>
+</body>
+</html>
